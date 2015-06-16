@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->_time->setDateTime(QDateTime::currentDateTime());
     _manager = new QNetworkAccessManager(this);
-    connect(ui->_fetch,SIGNAL(clicked(bool)),this,SLOT(fetch()));
+    connect(ui->_googleFetch,SIGNAL(clicked(bool)),this,SLOT(fetchGoogle()));
+    connect(ui->_bingFetch,SIGNAL(clicked(bool)),this,SLOT(fetchBing()));
 }
 
 MainWindow::~MainWindow()
@@ -23,28 +24,41 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::fetch()
+void MainWindow::fetchGoogle()
 {
     //QString time = ui->_time->time().
     uint departureTimeInt = ui->_time->dateTime().toTime_t();
     QString departureTime(QString("%1").arg(departureTimeInt));
     QUrl url(QString(ui->_url->text()).arg(ui->_key->text()).arg(ui->_origin->text()).arg(ui->_destination->text()).arg(departureTime));
     qDebug() << "isValid:" << url.isValid() << " " << url.toEncoded();
+
+    fetchUrl(url);
+}
+
+void MainWindow::fetchBing()
+{
+    QUrl url(QString(ui->_bingUrl->text()).arg(ui->_bingKey->text()).arg(ui->_mapArea->text()).arg(ui->_type->text()));
+    qDebug() << "isValid:" << url.isValid() << " " << url.toEncoded();
+    fetchUrl(url);
+    //ui->_encodedUrl->setText(url.toEncoded());
+
+}
+
+void MainWindow::fetchUrl(QUrl url)
+{
     ui->_encodedUrl->setText(url.toEncoded());
     _bytes.clear();
     ui->_result->clear();
     //return;
     _reply = _manager->get(QNetworkRequest(url));
     connect(_reply, SIGNAL(finished()),
-              this, SLOT(httpFinished()));
-      connect(_reply, SIGNAL(readyRead()),
-              this, SLOT(httpReadyRead()));
-      connect(_reply, SIGNAL(downloadProgress(qint64,qint64)),
-              this, SLOT(updateDataReadProgress(qint64,qint64)));
-
+            this, SLOT(httpFinished()));
+    connect(_reply, SIGNAL(readyRead()),
+            this, SLOT(httpReadyRead()));
+    connect(_reply, SIGNAL(downloadProgress(qint64,qint64)),
+            this, SLOT(updateDataReadProgress(qint64,qint64)));
 
 }
-
 
 void MainWindow::httpFinished()
 {

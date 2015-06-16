@@ -19,7 +19,9 @@ public:
 
 
     public slots:
-     void fetch();
+     void fetchGoogle();
+     void fetchBing();
+     void fetchUrl(QUrl);
      void httpFinished();
      void httpReadyRead();
      void updateDataReadProgress(qint64,qint64);
