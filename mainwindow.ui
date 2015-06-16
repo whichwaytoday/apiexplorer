@@ -199,7 +199,7 @@
               <item>
                <widget class="QLineEdit" name="_bingUrl">
                 <property name="text">
-                 <string>http://dev.virtualearth.net/REST/v1/Traffic/Incidents/%2/type=%3&amp;key=%1</string>
+                 <string>http://dev.virtualearth.net/REST/v1/Traffic/Incidents/%2?type=%3&amp;key=%1</string>
                 </property>
                </widget>
               </item>
