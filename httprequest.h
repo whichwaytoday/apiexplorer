@@ -21,7 +21,6 @@ public:
     void fetch();
     bool isSuccess() const;
     int status() const;
-    void addParam(const QString &key, const QString &value);
 
 signals:
     void finished( const QByteArray &data);

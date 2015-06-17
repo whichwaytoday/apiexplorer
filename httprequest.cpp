@@ -33,11 +33,6 @@ int HttpRequest::status() const {return _status;}
 
 bool HttpRequest::isSuccess() const {return (_status == 200);}
 
-void HttpRequest::addParam(const QString &key, const QString &value)
-{
-
-}
-
 void HttpRequest::httpFinished()
 {
     _bytes += _reply->readAll();
@@ -63,7 +58,7 @@ void HttpRequest::httpReadyRead()
     _bytes += _reply->readAll();
 }
 
-void HttpRequest::updateDataReadProgress(qint64 bytesReceived,qint64 bytesTotal)
+void HttpRequest::updateDataReadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
     qDebug() << "HttpRequest progress bytesReceived:" << bytesReceived << " bytesTotal:" << bytesTotal;
 }
