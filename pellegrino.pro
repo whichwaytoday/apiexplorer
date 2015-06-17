@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    httprequest.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    httprequest.h
 
 FORMS    += mainwindow.ui
