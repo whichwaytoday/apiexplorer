@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network qml quick quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    httprequest.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    httprequest.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    ExplorerQmlForm.qml
+
+RESOURCES += \
+    resources.qrc
