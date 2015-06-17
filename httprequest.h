@@ -10,26 +10,21 @@
 
 class HttpRequest : public QObject
 {
-    enum class Status {
-        SUCCESS = 0,
-        ERROR = 1,
-        PROCESSING = 2,
-        NEW = 3
-    };
-
     Q_OBJECT
+    Q_ENUMS(Status)
 public:
+
     explicit HttpRequest(QNetworkAccessManager *_manager, QObject *parent = 0);
     HttpRequest(QNetworkAccessManager *_manager, QUrl url, QObject *parent = 0);
     void setUrl(QUrl);
     QUrl url() const;
-    void exec();
-    Status status() const;
-    int htmlStatus();
+    void fetch();
+    bool isSuccess() const;
+    int status() const;
     void addParam(const QString &key, const QString &value);
 
 signals:
-    void finished(const QString &name, const QByteArray &data);
+    void finished( const QByteArray &data);
 
 private slots:
     void httpFinished();
@@ -39,8 +34,9 @@ private slots:
 private:
     QUrlQuery _query;
     QNetworkReply *_reply;
+    QByteArray _bytes;
     QUrl _url;
-    Status _status;
+    int _status;
     QNetworkAccessManager *_manager;
 };
 

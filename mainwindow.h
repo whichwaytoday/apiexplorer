@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "httprequest.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,16 +23,13 @@ public:
      void fetchGoogle();
      void fetchBing();
      void fetchUrl(QUrl);
-     void httpFinished();
-     void httpReadyRead();
-     void updateDataReadProgress(qint64,qint64);
+     void httpFinished(QByteArray);
 
 
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *_manager;
-    QNetworkReply *_reply;
-    QByteArray _bytes;
+    HttpRequest *_request;
 };
 
 #endif // MAINWINDOW_H

@@ -8,6 +8,7 @@
 #include <QJsonArray>
 #include <QDateTime>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -15,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->_time->setDateTime(QDateTime::currentDateTime());
     _manager = new QNetworkAccessManager(this);
+    _request = NULL;
     connect(ui->_googleFetch,SIGNAL(clicked(bool)),this,SLOT(fetchGoogle()));
     connect(ui->_bingFetch,SIGNAL(clicked(bool)),this,SLOT(fetchBing()));
 }
@@ -47,53 +49,22 @@ void MainWindow::fetchBing()
 void MainWindow::fetchUrl(QUrl url)
 {
     ui->_encodedUrl->setText(url.toEncoded());
-    _bytes.clear();
     ui->_result->clear();
-    //return;
-    _reply = _manager->get(QNetworkRequest(url));
-    connect(_reply, SIGNAL(finished()),
-            this, SLOT(httpFinished()));
-    connect(_reply, SIGNAL(readyRead()),
-            this, SLOT(httpReadyRead()));
-    connect(_reply, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(updateDataReadProgress(qint64,qint64)));
-
+    if (_request)
+        delete _request;
+    _request = new HttpRequest(_manager,url);
+    connect(_request,SIGNAL(finished(QByteArray)),this,SLOT(httpFinished(QByteArray)));
+    _request->fetch();
 }
 
-void MainWindow::httpFinished()
+void MainWindow::httpFinished(QByteArray bytes)
 {
     qDebug() << "httpFinished";
-    QByteArray bytes = _reply->readAll();
-    _bytes += bytes;
-    ui->_result->setText(QString::fromUtf8(_bytes.data(), _bytes.size()));
-    QJsonDocument jsonDoc = QJsonDocument::fromBinaryData(_bytes);
-    QJsonObject obj = jsonDoc.object();
-    qDebug() << obj["routes"].toString();
-    int statusCode = _reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    int redirection = _reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toInt();
-    qDebug() << "status code:" << statusCode;
-    qDebug() << "redirection code:" << redirection;
-    /*if(statusCode == 302)
-    {
-        QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-        qDebug() << "redirected from " + replyUrl + " to " + newUrl.toString();
-        QNetworkRequest newRequest(newUrl);
-        _manager->get(newRequest);
-        return;
-    }*/
-    _reply->deleteLater();
-}
 
-void MainWindow::httpReadyRead()
-{
-    qDebug() << "httpReadyRead";
-    QByteArray bytes = _reply->readAll();
-    _bytes += bytes;
-    //qDebug() << str;
-}
+    ui->_result->setText(QString::fromUtf8(bytes.data(), bytes.size()));
+    //QJsonDocument jsonDoc = QJsonDocument::fromBinaryData(bytes);
+    //QJsonObject obj = jsonDoc.object();
+    //qDebug() << obj["routes"].toString();
 
-void MainWindow::updateDataReadProgress(qint64,qint64)
-{
-    qDebug() << "upodateDataReadProgress";
 }
 
