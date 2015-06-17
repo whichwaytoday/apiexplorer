@@ -19,11 +19,6 @@ HttpRequest::HttpRequest(QObject *parent):QObject(parent)
     _status = -1;
 }
 
-void HttpRequest::setUrlString(QString str)
-{
-    _url.setUrl(str);
-}
-
 void HttpRequest::setUrl(QUrl url){ _url = url;}
 
 QUrl HttpRequest::url() const {return _url;}

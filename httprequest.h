@@ -22,7 +22,6 @@ signals:
     void finished( const QByteArray &data);
 
 public slots:
-    void setUrlString(QString);
     void setUrl(QUrl);
     QUrl url() const;
     void fetch();
