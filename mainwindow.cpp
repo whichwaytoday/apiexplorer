@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->_time->setDateTime(QDateTime::currentDateTime());
     _manager = new QNetworkAccessManager(this);
     _request = NULL;
+
     connect(ui->_googleFetch,SIGNAL(clicked(bool)),this,SLOT(fetchGoogle()));
     connect(ui->_bingFetch,SIGNAL(clicked(bool)),this,SLOT(fetchBing()));
 }

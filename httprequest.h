@@ -16,14 +16,18 @@ public:
 
     explicit HttpRequest(QNetworkAccessManager *_manager, QObject *parent = 0);
     HttpRequest(QNetworkAccessManager *_manager, QUrl url, QObject *parent = 0);
+    HttpRequest(QObject *parent = 0);
+
+signals:
+    void finished( const QByteArray &data);
+
+public slots:
+    void setUrlString(QString);
     void setUrl(QUrl);
     QUrl url() const;
     void fetch();
     bool isSuccess() const;
     int status() const;
-
-signals:
-    void finished( const QByteArray &data);
 
 private slots:
     void httpFinished();

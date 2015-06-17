@@ -6,11 +6,22 @@ HttpRequest::HttpRequest(QNetworkAccessManager *manager, QObject *parent) : QObj
     _status = -1;
 }
 
-HttpRequest::HttpRequest(QNetworkAccessManager *manager, QUrl url, QObject *parent)
+HttpRequest::HttpRequest(QNetworkAccessManager *manager, QUrl url, QObject *parent):QObject(parent)
 {
     _status = -1;
     _manager = manager;
     _url = url;
+}
+
+HttpRequest::HttpRequest(QObject *parent):QObject(parent)
+{
+    _manager = new QNetworkAccessManager();
+    _status = -1;
+}
+
+void HttpRequest::setUrlString(QString str)
+{
+    _url.setUrl(str);
 }
 
 void HttpRequest::setUrl(QUrl url){ _url = url;}
