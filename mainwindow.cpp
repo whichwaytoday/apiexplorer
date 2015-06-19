@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->_time->setDateTime(QDateTime::currentDateTime());
+    ui->_bingTime->setDateTime(QDateTime::currentDateTime());
     _manager = new QNetworkAccessManager(this);
     _request = NULL;
 
@@ -41,7 +42,10 @@ void MainWindow::fetchGoogle()
 
 void MainWindow::fetchBing()
 {
-    QUrl url(QString(ui->_bingUrl->text()).arg(ui->_bingKey->text()).arg(ui->_mapArea->text()).arg(ui->_type->text()));
+    QString departureTime = ui->_bingTime->dateTime().toString("MM/dd/yyyy HH:mm:ss AP");
+    //qDebug() << departureTime;
+    //return;
+    QUrl url(QString(ui->_bingUrl->text()).arg(ui->_bingKey->text()).arg(ui->_bingOrigin->text()).arg(ui->_bingDestination->text()).arg(departureTime));
     qDebug() << "isValid:" << url.isValid() << " " << url.toEncoded();
     fetchUrl(url);
     //ui->_encodedUrl->setText(url.toEncoded());
